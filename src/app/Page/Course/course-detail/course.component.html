@@ -1,0 +1,41 @@
+<template [ngIf]="course != null">
+
+<h3 class="page-header">Course #{{course.id}}</h3>
+
+<div class="row">
+    <div class="col-md-12">
+        <p><strong>Course name</strong></p>
+        <p>{{course.name}}</p>
+    </div>
+
+</div>
+
+<hr />
+<div id="actions" class="row">
+    <div class="col-md-12">
+        <a (click)="back()" class="btn btn-primary">Back</a>
+        <a href="edit.html" class="btn btn-default">Edit</a>
+        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#delete-modal">Delete</a>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabel">Delete course</h4>
+            </div>
+            <div class="modal-body">
+                Do you want to remove this item ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="delete(course)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</template>

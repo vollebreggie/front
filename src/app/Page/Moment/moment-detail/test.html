@@ -1,0 +1,86 @@
+<template [ngIf]="moment != null">
+
+<h3 class="page-header">Moment #{{moment.id}}</h3>
+
+
+
+<form [formGroup]="momentForm" (ngSubmit)="saveMoment(momentForm)">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" formControlName="title" />
+                <div class="alert alert-danger" [hidden]="momentForm.controls.title.valid">title is required</div>
+            </div>
+        
+            
+          <div class="form-group">
+                <label for="privacy">Privacy</label>
+                <select class="form-control" formControlName="privacy">
+                  <option *ngFor="let p of privacies" [value]="p">{{p}}</option>
+                </select>
+                <div class="alert alert-danger" [hidden]="momentForm.controls.privacy.valid">privacy is required</div>
+            </div>
+         
+         <table class="table table-striped" cellspacing="0" cellpadding="0">
+         <tbody>
+                <tr *ngFor="let part of momentParts">
+                    <td>{{part.text}}</td>
+                    
+                    <td class="actions">
+                        <a class="btn btn-success btn-xs" (click)="LoadPart(part)">Edit</a>
+                        <a class="btn btn-danger btn-xs" (click)="currentPart=part" data-toggle="modal" data-target="#delete-modal-part">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+         </table>
+      
+
+         <div class="form-group">
+        <label for="text">Text</label>
+        <input type="text" class="form-control" name="text" #text="ngModel" [(ngModel)]="currentMomentPart.text" [ngModelOptions]="{standalone: true}" >
+      </div>
+            
+            <button class="btn btn-default" (click)="addMomentPart()">Create Part</button> 
+            <button class="btn btn-default" (click)="EditPart()" [disabled]="!edit">Edit Part</button> 
+            <button type="submit" class="btn btn-default" [disabled]="!momentForm.valid">Submit Moment</button> 
+        </form> 
+
+
+  <div class="modal fade" id="delete-modal-part" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalLabel">Delete part</h4>
+                </div>
+                <div class="modal-body">
+                    Do you want to remove this part ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="delete(currentPart)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
+
+<!-- Modal -->
+<div class="modal fade" id="delete-modal-moment" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabel">Delete moment</h4>
+            </div>
+            <div class="modal-body">
+                Do you want to remove this item ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="deleteMoment(moment)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</template>

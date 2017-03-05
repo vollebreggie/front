@@ -1,0 +1,5 @@
+<!-- <file-upload #fu (change)="fu.upload()" [multiple]="true"></file-upload> -->
+
+<input type="file" (change)="addPhoto()" [multiple]="true" #fileInput>
+
+<p *ngIf="photoObservable != null">{{photoObservable.id}}</p>

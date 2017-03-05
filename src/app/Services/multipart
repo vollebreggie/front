@@ -1,0 +1,46 @@
+ @Configuration
+ @EnableWebSecurity
+ @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+  ...
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+      //http.addFilterBefore(multipartFilter(), CsrfFilter.class);
+      System.out.println("Loading configure");
+      http
+      .addFilterBefore(multipartFilter(), CsrfFilter.class)
+          .csrf()
+          .disable()
+          .headers()
+          .frameOptions()
+          .disable()
+      .and()
+          .sessionManagement()
+          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .and()
+          .authorizeRequests()
+          .antMatchers("/api/**").authenticated()
+          .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+          .antMatchers("/swagger-resources/configuration/ui").permitAll()
+      .and()
+          .apply(securityConfigurerAdapter());
+
+  }
+
+ @Bean(name = "commonsMultipartResolver")
+  public CommonsMultipartResolver commonsMultipartResolver() {
+      final CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+      commonsMultipartResolver.setMaxUploadSize(-1);
+
+      return commonsMultipartResolver;
+  }
+
+ @Bean
+  @Order(0)
+  public MultipartFilter multipartFilter() {
+          MultipartFilter multipartFilter = new MultipartFilter();
+          multipartFilter.setMultipartResolverBeanName("commonsMultipartResolver");
+          return multipartFilter;
+  }

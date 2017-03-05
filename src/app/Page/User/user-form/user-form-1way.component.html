@@ -1,0 +1,65 @@
+<form [formGroup]="userForm" (ngSubmit)="saveUser(userForm)">
+            
+           
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" formControlName="username" />
+                <div class="alert alert-danger" [hidden]="userForm.controls.username.valid">username is required</div>
+            </div>
+
+             <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" formControlName="password" />
+                <div class="alert alert-danger" [hidden]="userForm.controls.password.valid">username is required</div>     
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Photo</label>
+                <input type="file"  #fileInput required>
+            </div>
+
+             <div class="form-group">
+                <label for="nickname">Nickname</label>
+                <input type="text" class="form-control" formControlName="nickname" />
+                 </div>
+
+                 <div class="form-group">
+                <label for="wechat">Wechat</label>
+                <input type="text" class="form-control" formControlName="wechat" />
+                 </div>
+
+                 <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" formControlName="email" />
+                 </div>
+
+                 <div class="form-group">
+                <label for="nickname">Phone</label>
+                <input type="text" class="form-control" formControlName="phone" />
+                 </div>
+
+           <div class="form-group">
+                <label for="roles">Gender</label>
+                <select class="form-control" formControlName="gender">
+                  <option *ngFor="let g of genders" [value]="g">{{g}}</option>
+                </select>
+                <div class="alert alert-danger" [hidden]="userForm.controls.gender.valid">gender is required</div>
+            </div>     
+        
+            
+          <div class="form-group">
+                <label for="roles">Roles</label>
+                <select class="form-control" formControlName="role">
+                  <option *ngFor="let r of roles" [value]="r">{{r}}</option>
+                </select>
+                <div class="alert alert-danger" [hidden]="userForm.controls.role.valid">role is required</div>
+            </div>
+<div id="actions" class="row">
+    <div class="col-md-12">
+        <a (click)="back()" class="btn btn-primary">Back</a>
+        <button type="submit" class="btn btn-default" [disabled]="!userForm.valid">Submit</button>
+    </div>
+</div>
+              
+ </form>

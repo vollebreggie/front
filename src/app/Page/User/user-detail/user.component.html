@@ -1,0 +1,101 @@
+<template [ngIf]="user != null">
+
+<h3 class="page-header">User #{{user.id}}</h3>
+
+<div class="container">
+  <div *ngIf="!submitted">
+    <h1>User Details</h1>
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+      <div class="form-group">
+
+        <label for="username">Username</label>
+        <input type="text" class="form-control" name="username" #username="ngModel" [(ngModel)]="user.username" required>
+        <div class="alert alert-danger" [hidden]="username.valid">Name is required</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" name="password" #password="ngModel" [(ngModel)]="user.password" required>
+        <div class="alert alert-danger" [hidden]="password.valid">Password is required</div>
+      </div>
+
+      <div class="form-group">
+                <label for="photo">Photo</label>
+                <input type="file" (change)="changeListner($event)"  #fileInput required> 
+                <img [src]="'data:image/jpg;base64,'+user.photo.content" width="200" height="200"/>
+                
+            </div>
+
+<div  class="form-group">
+                <label for="New photo">New Photo</label>
+      <img class="image" />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Roles</label>
+        <select class="form-control" name="role" #role="ngModel" [(ngModel)]="user.role" >
+          <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+        </select>
+        
+      </div>
+
+      <div class="form-group">
+        <label for="role">Gender</label>
+        <select class="form-control" name="gender" #gender="ngModel" [(ngModel)]="user.gender" >
+          <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+        </select>
+        
+      </div>
+
+       <div class="form-group">
+        <label for="nickname">Nickname</label>
+        <input type="text" class="form-control" name="nickname" #nickname="ngModel" [(ngModel)]="user.nickname" >
+       
+      </div>
+
+        <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" name="email" #email="ngModel" [(ngModel)]="user.email" >
+      
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" class="form-control" name="phone" #phone="ngModel" [(ngModel)]="user.phone" >
+       
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Wechat</label>
+        <input type="text" class="form-control" name="wechat" #wechat="ngModel" [(ngModel)]="user.wechat" >
+        
+      </div>
+
+      <a (click)="back()" class="btn btn-primary">Back</a>
+      <button type="submit" class="btn btn-default" [disabled]="!userForm.valid">Edit</button>
+      <a href="#" class="btn btn-default" data-toggle="modal" data-target="#delete-modal">Delete</a>
+    </form>
+  </div>
+  </div>
+<hr />
+
+<!-- Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalLabel">Delete user</h4>
+            </div>
+            <div class="modal-body">
+                Do you want to remove this item ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="delete(user)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</template>

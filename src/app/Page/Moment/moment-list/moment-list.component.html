@@ -1,0 +1,80 @@
+<template [ngIf]="momentPage != null">
+
+    <div id="top" class="row">
+        <div class="col-sm-3">
+            <h2>Moment</h2>
+        </div>
+        <div class="col-sm-6">
+          <!-- //Search// -->
+            <div class="input-group h2">
+                <input name="data[search]" class="form-control" id="search" type="text" placeholder="Search">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+				</span>
+            </div>
+
+        </div> 
+        <!-- redirect to moment form -->
+        <div class="col-sm-3">
+            <a class="btn btn-primary pull-right h2'" (click)="goToForm()">New Moment</a>
+        </div>
+    </div> 
+
+    <hr/>
+    <!-- //List// -->
+    <div id="list" class="row">
+
+        <div class="table-responsive col-md-12">
+            <table class="table table-striped" cellspacing="0" cellpadding="0">
+                <thead>
+                <tr>
+                    <th><app-table-sort [table]="self" [page]="momentPage" [label]="'Title'" [property]="'title'" ></app-table-sort></th>
+                    <th><app-table-sort [table]="self" [page]="momentPage" [label]="'Posted'" [property]="'posted'" ></app-table-sort></th>
+                    <th><app-table-sort [table]="self" [page]="momentPage" [label]="'User'" [property]="'user'" ></app-table-sort></th>
+                    <th><app-table-sort [table]="self" [page]="momentPage" [label]="'Privacy'" [property]="'privacy'" ></app-table-sort></th>
+                    <th class="actions">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let moment of momentPage.content">
+                    <td>{{moment.title}}</td>
+                    <td>{{moment.posted}}</td>
+                    <td>{{moment.user.nickname}}</td>
+                    <td>{{moment.privacy}}</td>
+                    <td class="actions">
+                        <a class="btn btn-success btn-xs" (click)="goToDetails(moment)">Details</a>
+                        <a class="btn btn-danger btn-xs" (click)="currentMoment=moment" data-toggle="modal" data-target="#delete-modal">Delete</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div> <!-- //Pagination// -->
+
+    <app-table-pagination [table]="self" [page]="momentPage"></app-table-pagination>
+
+    <!-- //Delete Pop-up// -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalLabel">Delete moment</h4>
+                </div>
+                <div class="modal-body">
+                    Do you want to remove this item ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" (click)="delete(currentMoment)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</template>
