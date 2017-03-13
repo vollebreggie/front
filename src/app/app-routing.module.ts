@@ -16,6 +16,7 @@ import {MomentFormComponent} from './Page/Moment/moment-form/moment-form.compone
 import {ImageComponent} from './Page/Image/image.component';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: '/user', pathMatch: 'full' },
     //course
     {path: 'course', component: CourseListComponent},
     {path: 'course/:id', component: CourseComponent},
