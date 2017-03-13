@@ -1,9 +1,11 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
+import {UserService} from '../../../Services/user.service';
 import {MomentService} from '../../../Services/moment.service';
-import {Moment} from '../../../model/Moment';
-import {MomentPart} from '../../../model/MomentPart';
-import {Photo} from '../../../model/Photo';
+import {Moment} from '../../../Model/Moment';
+import {MomentPart} from '../../../Model/MomentPart';
+import {Photo} from '../../../Model/Photo';
+import {User} from '../../../Model/User';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import { ValidationService } from '../../../Services/validation.service';
@@ -25,6 +27,8 @@ export class MomentFormComponent implements OnInit {
   editIndex: number;
   edit: boolean;
   file: Blob;
+  user: User;
+
 
 momentFill: Moment = {
     id : null,
@@ -47,12 +51,14 @@ momentPartFill: MomentPart = {
 
 
 
-constructor(private router: Router, private route: ActivatedRoute, private momentService: MomentService, private formBuilder: FormBuilder, private element: ElementRef) {
+constructor(private router: Router, private route: ActivatedRoute, private momentService: MomentService, private userService: UserService, private formBuilder: FormBuilder, private element: ElementRef) {
 
 
     }  
   
   ngOnInit() {
+
+      
       this.momentParts = [];
       this.momentService.getPrivacies().subscribe(privacies => this.privacies = privacies);
       this.moment = this.momentFill;
@@ -62,10 +68,19 @@ constructor(private router: Router, private route: ActivatedRoute, private momen
         privacy: [this.moment.privacy, Validators.required]
       });
 
-      
+     this.route.params.subscribe(params=> {
+                if(params['id'] != null)
+                {                
+                    this.userService.getUser(Number(params['id'])).subscribe(user => this.user = user);
+                   
+                }else{
+                    this.userService.getUser(Number(11)).subscribe(user => this.user = user);
+                }
+    }); 
   }
 
   saveMoment({ value, valid }: { value: Moment, valid: boolean }) {
+      console.log(this.user);
     let fileList: File[] = [];
     if(valid)
     {
@@ -76,14 +91,18 @@ constructor(private router: Router, private route: ActivatedRoute, private momen
        
      this.momentParts[i].part = i;
      this.momentParts[i].photo.part = i;
-     console.log(this.momentParts[i].photo.name);
      formdata.append(this.momentParts[i].photo.name, this.momentParts[i].photo.content, this.momentParts[i].photo.name.toString());
      
      this.momentParts[i].photo.content = null;
   }
    formdata.append("file", fileList);
     moment.momentParts = this.momentParts;
+    if(this.user != null)
+    {
+        moment.user = this.user;
+    }
     formdata.append("data", JSON.stringify(moment));
+    
     this.momentService.addMomentWithPhoto(formdata).subscribe();
     }
      this.router.navigate(['moment']);
@@ -92,6 +111,7 @@ constructor(private router: Router, private route: ActivatedRoute, private momen
 
 //part stuff
   addMomentPart() {
+      console.log(this.user);
       let inputEl: HTMLInputElement = this.inputEl.nativeElement;
       let tempPart: MomentPart = { id: null, part: null, text: null, photo: null};
       let photo: Photo = {id: null, name: inputEl.files.item(0).name, content: inputEl.files.item(0), contentType: inputEl.files.item(0).type, part: null}
@@ -101,7 +121,6 @@ constructor(private router: Router, private route: ActivatedRoute, private momen
       tempPart.photo = photo;
       
       this.momentParts.push(tempPart);
-      console.log(this.momentParts);
       this.currentMomentPart.text = "";
       image.src = "";
       this.inputEl.nativeElement.value = '';

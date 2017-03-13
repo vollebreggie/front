@@ -27,8 +27,9 @@ const appRoutes: Routes = [
     {path: 'addUser2', component: UserForm2WayComponent},
     //moment
     {path: 'moment', component: MomentListComponent},
+    {path: 'moment/user/:id', component: MomentListComponent},
     {path: 'moment/:id', component: MomentComponent},
-    {path: 'addMoment', component: MomentFormComponent},
+    {path: 'addMoment/:id', component: MomentFormComponent},
     //image
     {path: 'image', component: ImageComponent},
 ];

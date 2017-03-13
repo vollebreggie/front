@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Response} from '@angular/http';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import * as Rx from 'rxjs/Rx';
 
 import 'rxjs/add/operator/switchMap';
@@ -21,16 +21,26 @@ export class MomentListComponent implements OnInit, Table<Moment> {
 
     momentPage: PaginationPage<Moment>;
     self: Table<Moment>;
-
-    constructor(private momentService: MomentService, private router: Router) {
+    user?: number;
+    constructor(private momentService: MomentService, private route: ActivatedRoute, private router: Router) {
 
     }
 
     ngOnInit() {
-        let observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(0, 10, null);
-        showLoading();
-        observable.subscribe(doNothing, hideLoading, hideLoading);
-        this.self = this;
+        
+            this.route.params.subscribe(params=> {
+                if(params['id'] != null)
+                {
+                    this.user = Number(params['id']);
+                   this.momentService.findMomentsByUser(0, 10, null, Number(params['id'], )).subscribe(momentPage => this.momentPage = momentPage);
+                }else{
+                   let observable: Rx.Observable<PaginationPage<any>> = this.fetchPage(0, 10, null);
+                  showLoading();
+                  observable.subscribe(doNothing, hideLoading, hideLoading);
+                }
+            
+        });
+      
     }
 
     fetchPage(pageNumber: number, pageSize: number, sort: PaginationPropertySort): Rx.Observable<PaginationPage<Moment>> {
@@ -46,7 +56,8 @@ export class MomentListComponent implements OnInit, Table<Moment> {
     }
 
     goToForm() {
-        this.router.navigate(['addMoment']);
+
+        this.router.navigate(['addMoment', this.user]);
     }
 
     delete(moment) {

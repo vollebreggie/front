@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {PaginationPage, PaginationPropertySort} from './../pagination';
 import {webServiceEndpoint} from './../commons';
 import {Moment} from './../Model/Moment';
+import {User} from './../Model/User';
 import {Http, Response, URLSearchParams, RequestOptions, Headers} from '@angular/http';
 import * as Rx from "rxjs/Rx";
 
@@ -30,6 +31,25 @@ private headers = new Headers({'Content-Type': 'application/json'});
             search: params
         });
         return this.http.get(`${webServiceEndpoint}/moment`, options)
+        .map(this.extractData)
+        .publish()
+        .refCount();
+    }
+
+    findMomentsByUser(page: number, pageSize: number, sort: PaginationPropertySort, id: number): Rx.Observable<PaginationPage<Moment>> {
+        let params = new URLSearchParams();
+        params.set('size', `${pageSize}`);
+        params.set('page', `${page}`);
+        if (sort != null) {
+            params.set('sort', `${sort.property},${sort.direction}`);
+       }
+       let headers = new Headers({ 'Content-Type': 'application/json' });
+        params.set('user', `${id}`);
+
+        let options = new RequestOptions({
+            search: params, headers: headers
+        });
+        return this.http.get(`${webServiceEndpoint}/moment/ByUser`, options)
         .map(this.extractData)
         .publish()
         .refCount();

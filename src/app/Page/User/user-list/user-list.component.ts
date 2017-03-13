@@ -46,8 +46,12 @@ export class UserListComponent implements OnInit, Table<User> {
         return observable;
     }
 
-    goToDetails(person) {
-        this.router.navigate(['user', person.id]);
+    goToDetails(user) {
+        this.router.navigate(['user', user.id]);
+    }
+
+    goToMomentsOfUser(user) {
+        this.router.navigate(['moment/user', user.id]);
     }
 
     goToForm() {

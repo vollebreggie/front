@@ -8,4 +8,4 @@ export function hideLoading() {
 
 export function doNothing () {}
 
-export const webServiceEndpoint: string = 'http://localhost:8080/server/api';
+export const webServiceEndpoint: string = 'http://203.195.147.70:8080/server-DD/api';
